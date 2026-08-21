@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>칼로리 계산기 2026 - 일일 권장 칼로리 자동 계산</title>
+<meta name="description" content="칼로리 계산기 - 나이, 키, 몸무게, 활동량 기준 일일 권장 칼로리(TDEE)를 자동 계산합니다. 다이어트 목표별 칼로리 안내.">
+<link rel="stylesheet" href="../assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"칼로리 계산기","applicationCategory":"HealthApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"}}
+</script>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>🔥 칼로리 계산기</h1>
+    <p>일일 권장 칼로리(TDEE) 즉시 계산</p>
+  </header>
+  <div class="ad-slot">광고 영역</div>
+  <div class="calc-card">
+    <div class="form-row">
+      <div class="form-group">
+        <label for="gender">성별</label>
+        <select id="gender">
+          <option value="male">남성</option>
+          <option value="female">여성</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="age">나이</label>
+        <input type="number" id="age" placeholder="30" min="10" max="120">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="height">키 (cm)</label>
+        <input type="number" id="height" placeholder="170" min="50" max="300">
+      </div>
+      <div class="form-group">
+        <label for="weight">몸무게 (kg)</label>
+        <input type="number" id="weight" placeholder="70" min="10" max="500" step="0.1">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="activity">활동 수준</label>
+      <select id="activity">
+        <option value="1.2">비활동적 (사무직, 운동 안 함)</option>
+        <option value="1.375">가벼운 활동 (주 1~3회 운동)</option>
+        <option value="1.55" selected>보통 활동 (주 3~5회 운동)</option>
+        <option value="1.725">활발한 활동 (주 6~7회 운동)</option>
+        <option value="1.9">매우 활발 (육체노동, 하루 2회 운동)</option>
+      </select>
+    </div>
+    <button class="btn" onclick="calculate()">계산하기</button>
+    <div class="result-box" id="result">
+      <div class="result-highlight" id="tdee"></div>
+      <div class="result-row"><span class="label">기초대사량 (BMR)</span><span class="value" id="bmr"></span></div>
+      <div class="result-row"><span class="label">체중 감량 (-500kcal)</span><span class="value" id="lose"></span></div>
+      <div class="result-row"><span class="label">체중 유지</span><span class="value" id="maintain"></span></div>
+      <div class="result-row"><span class="label">근육 증가 (+300kcal)</span><span class="value" id="gain"></span></div>
+    </div>
+  </div>
+  <div class="ad-slot">광고 영역</div>
+  <div class="seo-content">
+    <h2>TDEE란?</h2>
+    <p>TDEE(Total Daily Energy Expenditure)는 하루 동안 소비하는 총 에너지량입니다. 기초대사량(BMR)에 활동 계수를 곱하여 계산합니다.</p>
+    <h3>Mifflin-St Jeor 공식</h3>
+    <ul>
+      <li><strong>남성</strong>: BMR = 10 × 체중(kg) + 6.25 × 키(cm) - 5 × 나이 + 5</li>
+      <li><strong>여성</strong>: BMR = 10 × 체중(kg) + 6.25 × 키(cm) - 5 × 나이 - 161</li>
+    </ul>
+    <h3>다이어트 팁</h3>
+    <p>체중 감량을 위해서는 TDEE보다 하루 500kcal 적게 섭취하면 주당 약 0.5kg 감량이 가능합니다. 극단적인 칼로리 제한은 건강에 해로울 수 있으므로, 기초대사량 이하로는 줄이지 마세요.</p>
+  </div>
+  <div class="ad-slot">광고 영역</div>
+  <footer>
+    <p>SmartCalc.tools — 무료 건강 계산기</p>
+    <p>참고용이며, 정확한 식단은 전문가와 상담하세요.</p>
+  </footer>
+</div>
+<script>
+function fmt(n){return Math.round(n).toLocaleString('ko-KR')}
+function calculate(){
+  var g=document.getElementById('gender').value;
+  var age=parseFloat(document.getElementById('age').value)||0;
+  var h=parseFloat(document.getElementById('height').value)||0;
+  var w=parseFloat(document.getElementById('weight').value)||0;
+  var act=parseFloat(document.getElementById('activity').value);
+  if(!age||!h||!w)return;
+  var bmr=10*w+6.25*h-5*age+(g==='male'?5:-161);
+  var tdee=bmr*act;
+  document.getElementById('tdee').textContent='일일 권장 '+fmt(tdee)+' kcal';
+  document.getElementById('bmr').textContent=fmt(bmr)+' kcal';
+  document.getElementById('lose').textContent=fmt(tdee-500)+' kcal/일';
+  document.getElementById('maintain').textContent=fmt(tdee)+' kcal/일';
+  document.getElementById('gain').textContent=fmt(tdee+300)+' kcal/일';
+  document.getElementById('result').classList.add('show');
+}
+</script>
+</body>
+</html>

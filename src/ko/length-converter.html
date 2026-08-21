@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>길이 변환 계산기 - cm 인치 피트 미터 변환</title>
+<meta name="description" content="길이 단위 변환기 - cm, 인치, 피트, 미터, mm, km, 마일을 즉시 변환합니다.">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="container">
+  <header><h1>📏 길이 변환</h1><p>cm · 인치 · 피트 · 미터 즉시 변환</p></header>
+  <div class="ad-slot">광고 영역</div>
+  <div class="calc-card">
+    <div class="form-group">
+      <label for="val">값 입력</label>
+      <input type="number" id="val" placeholder="100" step="any">
+    </div>
+    <div class="form-group">
+      <label for="from">변환 기준</label>
+      <select id="from" onchange="convert()">
+        <option value="cm" selected>센티미터 (cm)</option>
+        <option value="m">미터 (m)</option>
+        <option value="mm">밀리미터 (mm)</option>
+        <option value="km">킬로미터 (km)</option>
+        <option value="in">인치 (in)</option>
+        <option value="ft">피트 (ft)</option>
+        <option value="yd">야드 (yd)</option>
+        <option value="mi">마일 (mi)</option>
+      </select>
+    </div>
+    <button class="btn" onclick="convert()">변환하기</button>
+    <div class="result-box" id="result"></div>
+  </div>
+  <div class="ad-slot">광고 영역</div>
+  <div class="seo-content">
+    <h2>길이 단위 변환표</h2>
+    <ul>
+      <li>1 인치 = 2.54 cm</li><li>1 피트 = 30.48 cm</li><li>1 야드 = 91.44 cm</li>
+      <li>1 마일 = 1.60934 km</li><li>1 미터 = 100 cm</li>
+    </ul>
+  </div>
+  <footer><p>SmartCalc.tools — 무료 단위 변환기</p></footer>
+</div>
+<script>
+var toCm={cm:1,m:100,mm:0.1,km:100000,in:2.54,ft:30.48,yd:91.44,mi:160934};
+var names={cm:'cm',m:'m',mm:'mm',km:'km',in:'인치',ft:'피트',yd:'야드',mi:'마일'};
+document.getElementById('val').addEventListener('input',convert);
+function convert(){
+  var v=parseFloat(document.getElementById('val').value);
+  if(isNaN(v)){document.getElementById('result').innerHTML='';return;}
+  var from=document.getElementById('from').value;
+  var cm=v*toCm[from];
+  var html='<div class="result-highlight">변환 결과</div>';
+  Object.keys(toCm).forEach(function(u){
+    if(u!==from){
+      var r=cm/toCm[u];
+      var d=r<0.01?r.toExponential(2):(r<100?r.toFixed(4):r.toLocaleString('ko-KR',{maximumFractionDigits:2}));
+      html+='<div class="result-row"><span class="label">'+names[u]+'</span><span class="value">'+d+'</span></div>';
+    }
+  });
+  document.getElementById('result').innerHTML=html;
+  document.getElementById('result').classList.add('show');
+}
+</script>
+</body>
+</html>

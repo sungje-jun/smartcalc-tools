@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JSON Formatter - Free Online JSON Beautifier & Validator</title>
+<meta name="description" content="Free JSON formatter - Beautify, minify, and validate JSON data instantly. Syntax highlighting and error detection.">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="container">
+  <header><h1>{ } JSON Formatter</h1><p>Beautify, minify, and validate JSON</p></header>
+  <div class="ad-slot">Ad Space</div>
+  <div class="calc-card">
+    <div class="form-group"><label for="input">Paste JSON</label>
+      <textarea id="input" rows="10" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;font-family:monospace;font-size:0.9rem;resize:vertical;background:var(--bg);color:var(--text)" placeholder='{"name":"John","age":30}'></textarea>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn" onclick="beautify()">Beautify</button>
+      <button class="btn" style="background:var(--text-muted)" onclick="minify()">Minify</button>
+      <button class="btn" style="background:var(--text-muted)" onclick="copyOutput()">Copy</button>
+    </div>
+    <div id="status" style="margin-top:8px;font-size:0.9rem"></div>
+    <div class="form-group" style="margin-top:16px"><label>Output</label>
+      <pre id="output" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;font-family:monospace;font-size:0.85rem;overflow-x:auto;min-height:100px;background:var(--bg);color:var(--text);white-space:pre-wrap;word-break:break-all"></pre>
+    </div>
+  </div>
+  <div class="ad-slot">Ad Space</div>
+  <div class="seo-content"><h2>About JSON Formatter</h2><p>JSON (JavaScript Object Notation) is a lightweight data format. This tool validates your JSON and formats it with proper indentation for readability, or minifies it for production use.</p></div>
+  <footer><p>SmartCalc.tools — Free Developer Tools</p></footer>
+</div>
+<script>
+function beautify(){
+  var s=document.getElementById('status');
+  try{var obj=JSON.parse(document.getElementById('input').value);var out=JSON.stringify(obj,null,2);document.getElementById('output').textContent=out;s.textContent='Valid JSON';s.style.color='#22c55e';}
+  catch(e){document.getElementById('output').textContent='';s.textContent='Error: '+e.message;s.style.color='#ef4444';}
+}
+function minify(){
+  var s=document.getElementById('status');
+  try{var obj=JSON.parse(document.getElementById('input').value);var out=JSON.stringify(obj);document.getElementById('output').textContent=out;s.textContent='Minified ('+out.length+' chars)';s.style.color='#22c55e';}
+  catch(e){s.textContent='Error: '+e.message;s.style.color='#ef4444';}
+}
+function copyOutput(){
+  var t=document.getElementById('output').textContent;
+  if(t)navigator.clipboard.writeText(t).then(function(){document.getElementById('status').textContent='Copied!';document.getElementById('status').style.color='#22c55e';});
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Temperature Converter - Celsius, Fahrenheit, Kelvin</title>
+<meta name="description" content="Free temperature converter - Convert between Celsius, Fahrenheit, and Kelvin instantly.">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="container">
+  <header><h1>🌡️ Temperature Converter</h1><p>Convert between °C, °F, and Kelvin</p></header>
+  <div class="ad-slot">Ad Space</div>
+  <div class="calc-card">
+    <div class="form-group"><label for="val">Temperature</label><input type="number" id="val" placeholder="100" step="any"></div>
+    <div class="form-group"><label for="from">From</label>
+      <select id="from" onchange="convert()">
+        <option value="C">Celsius (°C)</option><option value="F" selected>Fahrenheit (°F)</option><option value="K">Kelvin (K)</option>
+      </select>
+    </div>
+    <button class="btn" onclick="convert()">Convert</button>
+    <div class="result-box" id="result"></div>
+  </div>
+  <div class="ad-slot">Ad Space</div>
+  <div class="seo-content"><h2>Conversion Formulas</h2><ul><li>°F = °C × 9/5 + 32</li><li>°C = (°F - 32) × 5/9</li><li>K = °C + 273.15</li></ul><h3>Common Temperatures</h3><ul><li>Water freezes: 0°C = 32°F = 273.15K</li><li>Water boils: 100°C = 212°F = 373.15K</li><li>Body temperature: 37°C = 98.6°F</li></ul></div>
+  <footer><p>SmartCalc.tools — Free Unit Converters</p></footer>
+</div>
+<script>
+document.getElementById('val').addEventListener('input',convert);
+function convert(){
+  var v=parseFloat(document.getElementById('val').value);if(isNaN(v))return;
+  var f=document.getElementById('from').value;
+  var c=f==='C'?v:f==='F'?(v-32)*5/9:v-273.15;
+  var results={};
+  results['°C']=c.toFixed(2);
+  results['°F']=(c*9/5+32).toFixed(2);
+  results['K']=(c+273.15).toFixed(2);
+  var labels={'°C':'Celsius','°F':'Fahrenheit','K':'Kelvin'};
+  var skip={'C':'°C','F':'°F','K':'K'};
+  var h='<div class="result-highlight">Results</div>';
+  Object.keys(results).forEach(function(u){if(u!==skip[f])h+='<div class="result-row"><span class="label">'+labels[u]+'</span><span class="value">'+results[u]+' '+u+'</span></div>';});
+  document.getElementById('result').innerHTML=h;document.getElementById('result').classList.add('show');
+}
+</script>
+</body>
+</html>

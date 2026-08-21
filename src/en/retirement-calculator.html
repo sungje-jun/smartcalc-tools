@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retirement Calculator 2026 - How Much Do You Need to Retire?</title>
+<meta name="description" content="Free retirement calculator - Find out how much you need to save for retirement. Factor in inflation, Social Security, and investment growth.">
+<link rel="stylesheet" href="../assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Retirement Calculator","applicationCategory":"FinanceApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+</head>
+<body>
+<div class="container">
+  <header><h1>🏖️ Retirement Calculator</h1><p>How much do you need to retire comfortably?</p></header>
+  <div class="ad-slot">Ad Space</div>
+  <div class="calc-card">
+    <div class="form-row">
+      <div class="form-group"><label for="age">Current Age</label><input type="number" id="age" value="30" min="18" max="80"></div>
+      <div class="form-group"><label for="retire-age">Retirement Age</label><input type="number" id="retire-age" value="65" min="30" max="90"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label for="savings">Current Savings ($)</label><input type="text" id="savings" placeholder="50,000" inputmode="numeric"></div>
+      <div class="form-group"><label for="monthly">Monthly Contribution ($)</label><input type="text" id="monthly" placeholder="1,000" inputmode="numeric"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label for="return-rate">Expected Return (%)</label><input type="number" id="return-rate" value="7" step="0.1" min="0" max="30"></div>
+      <div class="form-group"><label for="inflation">Inflation (%)</label><input type="number" id="inflation" value="3" step="0.1" min="0" max="15"></div>
+    </div>
+    <div class="form-group"><label for="monthly-need">Monthly Retirement Income Needed ($)</label><input type="text" id="monthly-need" placeholder="4,000" inputmode="numeric"></div>
+    <button class="btn" onclick="calculate()">Calculate</button>
+    <div class="result-box" id="result">
+      <div class="result-highlight" id="nest-egg"></div>
+      <div class="result-row"><span class="label">Years Until Retirement</span><span class="value" id="years"></span></div>
+      <div class="result-row"><span class="label">Total Contributions</span><span class="value" id="contrib"></span></div>
+      <div class="result-row"><span class="label">Investment Growth</span><span class="value" id="growth"></span></div>
+      <div class="result-row"><span class="label">Retirement Need (4% Rule)</span><span class="value" id="need"></span></div>
+      <div class="result-row"><span class="label">Gap / Surplus</span><span class="value" id="gap"></span></div>
+    </div>
+  </div>
+  <div class="ad-slot">Ad Space</div>
+  <div class="seo-content">
+    <h2>The 4% Rule</h2>
+    <p>The 4% rule suggests you can withdraw 4% of your retirement savings annually without running out of money for 30 years. Multiply your desired annual income by 25 to find your target nest egg.</p>
+    <h3>Start Early</h3>
+    <p>Thanks to compound interest, starting 10 years earlier can nearly double your retirement savings, even with the same monthly contribution.</p>
+  </div>
+  <div class="ad-slot">Ad Space</div>
+  <footer><p>SmartCalc.tools — Free Financial Calculators</p><p>Estimates only. Consult a financial advisor for personalized planning.</p></footer>
+</div>
+<script>
+function fmt(n){return '$'+Math.round(n).toLocaleString('en-US')}
+function parseMoney(s){return parseInt(String(s).replace(/[^0-9]/g,''),10)||0}
+['savings','monthly','monthly-need'].forEach(function(id){document.getElementById(id).addEventListener('input',function(){var raw=this.value.replace(/[^0-9]/g,'');if(raw)this.value=parseInt(raw).toLocaleString('en-US');});});
+function calculate(){
+  var age=parseInt(document.getElementById('age').value)||30;
+  var retAge=parseInt(document.getElementById('retire-age').value)||65;
+  var savings=parseMoney(document.getElementById('savings').value);
+  var mo=parseMoney(document.getElementById('monthly').value);
+  var ret=parseFloat(document.getElementById('return-rate').value)/100;
+  var inf=parseFloat(document.getElementById('inflation').value)/100;
+  var need=parseMoney(document.getElementById('monthly-need').value);
+  var years=retAge-age;
+  if(years<=0)return;
+  var realRate=ret-inf;
+  var balance=savings;
+  var totalContrib=savings;
+  for(var i=0;i<years;i++){balance=balance*(1+ret)+mo*12;totalContrib+=mo*12;}
+  var needTotal=need*12*25;
+  var needAdj=needTotal*Math.pow(1+inf,years);
+  var gap=balance-needAdj;
+  document.getElementById('nest-egg').textContent='Projected Nest Egg: '+fmt(balance);
+  document.getElementById('years').textContent=years+' years';
+  document.getElementById('contrib').textContent=fmt(totalContrib);
+  document.getElementById('growth').textContent=fmt(balance-totalContrib);
+  document.getElementById('need').textContent=fmt(needAdj)+' (inflation-adjusted)';
+  document.getElementById('gap').textContent=(gap>=0?'Surplus: +':'Gap: ')+fmt(Math.abs(gap));
+  document.getElementById('gap').style.color=gap>=0?'#22c55e':'#ef4444';
+  document.getElementById('result').classList.add('show');
+}
+</script>
+</body>
+</html>

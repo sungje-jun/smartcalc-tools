@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salary Calculator 2026 - Annual to Hourly, After Tax</title>
+<meta name="description" content="Free salary calculator - Convert annual salary to hourly, biweekly, monthly. Estimate take-home pay after federal and state taxes.">
+<link rel="stylesheet" href="../assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Salary Calculator","applicationCategory":"FinanceApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+</head>
+<body>
+<div class="container">
+  <header><h1>💵 Salary Calculator</h1><p>Annual to hourly, before and after tax</p></header>
+  <div class="ad-slot">Ad Space</div>
+  <div class="calc-card">
+    <div class="form-group"><label for="salary">Annual Salary ($)</label><input type="text" id="salary" placeholder="75,000" inputmode="numeric"></div>
+    <div class="form-row">
+      <div class="form-group"><label for="hours">Hours/Week</label><input type="number" id="hours" value="40" min="1" max="80"></div>
+      <div class="form-group"><label for="weeks">Weeks/Year</label><input type="number" id="weeks" value="52" min="1" max="52"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label for="fed-rate">Federal Tax (%)</label><input type="number" id="fed-rate" value="22" step="1" min="0" max="50"></div>
+      <div class="form-group"><label for="state-rate">State Tax (%)</label><input type="number" id="state-rate" value="5" step="0.1" min="0" max="15"></div>
+    </div>
+    <button class="btn" onclick="calculate()">Calculate</button>
+    <div class="result-box" id="result">
+      <div class="result-highlight" id="take-home"></div>
+      <div class="result-row"><span class="label">Gross Annual</span><span class="value" id="annual"></span></div>
+      <div class="result-row"><span class="label">Gross Monthly</span><span class="value" id="monthly"></span></div>
+      <div class="result-row"><span class="label">Gross Biweekly</span><span class="value" id="biweekly"></span></div>
+      <div class="result-row"><span class="label">Hourly Rate</span><span class="value" id="hourly"></span></div>
+      <div class="result-row"><span class="label">Federal Tax</span><span class="value" id="fed"></span></div>
+      <div class="result-row"><span class="label">State Tax</span><span class="value" id="state"></span></div>
+      <div class="result-row"><span class="label">FICA (7.65%)</span><span class="value" id="fica"></span></div>
+      <div class="result-row"><span class="label">Net Monthly</span><span class="value" id="net-mo"></span></div>
+    </div>
+  </div>
+  <div class="ad-slot">Ad Space</div>
+  <div class="seo-content">
+    <h2>Understanding Your Paycheck</h2>
+    <p>Your gross salary is reduced by federal income tax, state income tax, and FICA contributions (Social Security 6.2% + Medicare 1.45% = 7.65%).</p>
+    <h3>2026 Federal Tax Brackets (Single)</h3>
+    <ul><li>10%: $0 – $11,600</li><li>12%: $11,601 – $47,150</li><li>22%: $47,151 – $100,525</li><li>24%: $100,526 – $191,950</li><li>32%: $191,951 – $243,725</li><li>35%: $243,726 – $609,350</li><li>37%: $609,351+</li></ul>
+  </div>
+  <div class="ad-slot">Ad Space</div>
+  <footer><p>SmartCalc.tools — Free Financial Calculators</p><p>Estimates only. Tax obligations vary by situation.</p></footer>
+</div>
+<script>
+function fmt(n){return '$'+Math.round(n).toLocaleString('en-US')}
+function parseMoney(s){return parseInt(String(s).replace(/[^0-9]/g,''),10)||0}
+document.getElementById('salary').addEventListener('input',function(){var raw=this.value.replace(/[^0-9]/g,'');if(raw)this.value=parseInt(raw).toLocaleString('en-US');});
+function calculate(){
+  var sal=parseMoney(document.getElementById('salary').value);
+  var hrs=parseFloat(document.getElementById('hours').value)||40;
+  var wks=parseFloat(document.getElementById('weeks').value)||52;
+  var fedR=parseFloat(document.getElementById('fed-rate').value)/100;
+  var stR=parseFloat(document.getElementById('state-rate').value)/100;
+  if(!sal)return;
+  var hourly=sal/(hrs*wks);
+  var fed=sal*fedR;
+  var st=sal*stR;
+  var fica=sal*0.0765;
+  var net=sal-fed-st-fica;
+  document.getElementById('take-home').textContent='Take-Home: '+fmt(net)+'/year';
+  document.getElementById('annual').textContent=fmt(sal);
+  document.getElementById('monthly').textContent=fmt(sal/12);
+  document.getElementById('biweekly').textContent=fmt(sal/26);
+  document.getElementById('hourly').textContent='$'+(hourly).toFixed(2);
+  document.getElementById('fed').textContent='-'+fmt(fed);
+  document.getElementById('state').textContent='-'+fmt(st);
+  document.getElementById('fica').textContent='-'+fmt(fica);
+  document.getElementById('net-mo').textContent=fmt(net/12);
+  document.getElementById('result').classList.add('show');
+}
+</script>
+</body>
+</html>

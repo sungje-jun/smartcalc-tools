@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word Counter - Free Online Word & Character Counter</title>
+<meta name="description" content="Free word counter - Count words, characters, sentences, paragraphs, and estimated reading time instantly.">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="container">
+  <header><h1>🔤 Word Counter</h1><p>Count words, characters, sentences</p></header>
+  <div class="ad-slot">Ad Space</div>
+  <div class="calc-card">
+    <div class="form-group"><label for="text">Paste or type your text</label>
+      <textarea id="text" rows="10" style="width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;font-size:1rem;resize:vertical;background:var(--bg);color:var(--text)" placeholder="Type or paste your text here..."></textarea>
+    </div>
+    <div class="result-box show" id="result">
+      <div class="result-row"><span class="label">Words</span><span class="value" id="words">0</span></div>
+      <div class="result-row"><span class="label">Characters</span><span class="value" id="chars">0</span></div>
+      <div class="result-row"><span class="label">Characters (no spaces)</span><span class="value" id="chars-ns">0</span></div>
+      <div class="result-row"><span class="label">Sentences</span><span class="value" id="sentences">0</span></div>
+      <div class="result-row"><span class="label">Paragraphs</span><span class="value" id="paragraphs">0</span></div>
+      <div class="result-row"><span class="label">Reading Time</span><span class="value" id="reading">0 min</span></div>
+    </div>
+  </div>
+  <div class="ad-slot">Ad Space</div>
+  <div class="seo-content"><h2>About Word Counter</h2><p>This tool counts words, characters, sentences, and paragraphs in real-time. Reading time is based on an average of 200 words per minute.</p></div>
+  <footer><p>SmartCalc.tools — Free Text Tools</p></footer>
+</div>
+<script>
+document.getElementById('text').addEventListener('input',count);
+function count(){
+  var t=document.getElementById('text').value;
+  var words=t.trim()?t.trim().split(/\s+/).length:0;
+  var chars=t.length;
+  var charsNs=t.replace(/\s/g,'').length;
+  var sentences=t.split(/[.!?]+/).filter(function(s){return s.trim().length>0}).length;
+  var paragraphs=t.split(/\n\n+/).filter(function(s){return s.trim().length>0}).length;
+  var mins=Math.ceil(words/200);
+  document.getElementById('words').textContent=words.toLocaleString();
+  document.getElementById('chars').textContent=chars.toLocaleString();
+  document.getElementById('chars-ns').textContent=charsNs.toLocaleString();
+  document.getElementById('sentences').textContent=sentences;
+  document.getElementById('paragraphs').textContent=paragraphs||0;
+  document.getElementById('reading').textContent=mins<1?'< 1 min':mins+' min';
+}
+</script>
+</body>
+</html>

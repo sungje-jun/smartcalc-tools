@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weight Converter - kg, lbs, oz, stones</title>
+<meta name="description" content="Free weight converter - Convert between kg, pounds, ounces, stones, grams instantly.">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="container">
+  <header><h1>🏋️ Weight Converter</h1><p>Convert between kg, lbs, oz, stones</p></header>
+  <div class="ad-slot">Ad Space</div>
+  <div class="calc-card">
+    <div class="form-group"><label for="val">Value</label><input type="number" id="val" placeholder="70" step="any"></div>
+    <div class="form-group"><label for="from">From</label>
+      <select id="from" onchange="convert()">
+        <option value="kg" selected>Kilograms (kg)</option><option value="g">Grams (g)</option><option value="mg">Milligrams (mg)</option>
+        <option value="t">Metric Tons (t)</option><option value="lb">Pounds (lb)</option><option value="oz">Ounces (oz)</option><option value="st">Stones (st)</option>
+      </select>
+    </div>
+    <button class="btn" onclick="convert()">Convert</button>
+    <div class="result-box" id="result"></div>
+  </div>
+  <div class="ad-slot">Ad Space</div>
+  <div class="seo-content"><h2>Common Conversions</h2><ul><li>1 kg = 2.20462 lbs</li><li>1 lb = 16 oz</li><li>1 stone = 14 lbs = 6.35 kg</li></ul></div>
+  <footer><p>SmartCalc.tools — Free Unit Converters</p></footer>
+</div>
+<script>
+var toKg={kg:1,g:0.001,mg:0.000001,t:1000,lb:0.453592,oz:0.0283495,st:6.35029};
+var names={kg:'kg',g:'grams',mg:'mg',t:'metric tons',lb:'pounds',oz:'ounces',st:'stones'};
+document.getElementById('val').addEventListener('input',convert);
+function convert(){var v=parseFloat(document.getElementById('val').value);if(isNaN(v))return;var f=document.getElementById('from').value;var kg=v*toKg[f];var h='<div class="result-highlight">Results</div>';Object.keys(toKg).forEach(function(u){if(u!==f){var r=kg/toKg[u];var d=r<0.01?r.toExponential(2):(r<100?r.toFixed(4):r.toLocaleString('en-US',{maximumFractionDigits:2}));h+='<div class="result-row"><span class="label">'+names[u]+'</span><span class="value">'+d+'</span></div>';}});document.getElementById('result').innerHTML=h;document.getElementById('result').classList.add('show');}
+</script>
+</body>
+</html>
