@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workers Comp Settlement Calculator 2026 - Estimate Benefits</title>
+<meta name="description" content="Free workers compensation calculator. Estimate your weekly benefits, total settlement value, and lump sum payout based on your injury, wages, and state rules.">
+<meta name="keywords" content="workers comp calculator, workers compensation settlement, workers comp benefits, work injury compensation, disability benefits calculator">
+<link rel="canonical" href="https://sjaistudio.com/en/workers-comp-calculator/">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8079614247767823" crossorigin="anonymous"></script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How is workers comp calculated?","acceptedAnswer":{"@type":"Answer","text":"Workers comp typically pays 2/3 of your average weekly wage, up to a state maximum. Benefits continue for the duration of your disability or until maximum medical improvement."}},
+{"@type":"Question","name":"What is the average workers comp settlement?","acceptedAnswer":{"@type":"Answer","text":"Average settlements range from $20,000-$50,000 for minor injuries and $50,000-$200,000+ for serious injuries requiring surgery or causing permanent disability."}}
+]}
+</script>
+<style>
+:root {
+  --bg: #ffffff; --bg2: #f5f6f8; --card: #ffffff; --border: #e0e3e8;
+  --text: #1a1a2e; --text2: #555e6e; --accent: #0369a1; --accent2: #075985;
+  --input-bg: #f9fafb; --shadow: rgba(0,0,0,0.06);
+  --success: #16a34a; --warn: #f59e0b;
+  --info-bg: #eff6ff; --info-border: #bfdbfe; --info-text: #1e40af;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1117; --bg2: #1a1c25; --card: #1e2029; --border: #2e3040;
+    --text: #e8e9ed; --text2: #9ba3b0; --accent: #38bdf8; --accent2: #7dd3fc;
+    --input-bg: #252736; --shadow: rgba(0,0,0,0.3);
+    --success: #4ade80; --warn: #fbbf24;
+    --info-bg: #0c2340; --info-border: #1a4580; --info-text: #7dd3fc;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1117; --bg2: #1a1c25; --card: #1e2029; --border: #2e3040;
+  --text: #e8e9ed; --text2: #9ba3b0; --accent: #38bdf8; --accent2: #7dd3fc;
+  --input-bg: #252736; --shadow: rgba(0,0,0,0.3);
+  --success: #4ade80; --warn: #fbbf24;
+  --info-bg: #0c2340; --info-border: #1a4580; --info-text: #7dd3fc;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+.container { max-width: 640px; margin: 0 auto; padding: 16px; }
+header { display: flex; align-items: center; justify-content: space-between; padding: 20px 0 12px; }
+header h1 { font-size: 1.25rem; font-weight: 700; }
+#themeToggle { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; width: 40px; height: 40px; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; color: var(--text); }
+.ad-slot { margin: 16px 0; min-height: 100px; text-align: center; }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 3px var(--shadow); }
+.card h2 { font-size: 1rem; font-weight: 600; margin-bottom: 14px; }
+label { display: block; font-size: 0.85rem; color: var(--text2); margin-bottom: 4px; font-weight: 500; }
+input[type="number"], select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--input-bg); color: var(--text); font-size: 1rem; outline: none; }
+input:focus, select:focus { border-color: var(--accent); }
+.field { margin-bottom: 14px; }
+.field-hint { font-size: 0.78rem; color: var(--text2); margin-top: 2px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.btn { display: block; width: 100%; padding: 14px; background: var(--accent); color: #fff; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 8px; }
+.result-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.result-row:last-child { border-bottom: none; }
+.result-label { font-size: 0.88rem; color: var(--text2); }
+.result-value { font-size: 1rem; font-weight: 600; }
+.result-value.highlight { color: var(--accent); font-size: 1.25rem; }
+.result-value.green { color: var(--success); }
+.info-box { background: var(--info-bg); border: 1px solid var(--info-border); border-radius: 8px; padding: 12px 14px; font-size: 0.82rem; color: var(--info-text); line-height: 1.5; margin-top: 10px; }
+h3 { font-size: 1.1rem; font-weight: 700; margin: 24px 0 8px; }
+.content p { font-size: 0.92rem; color: var(--text2); margin-bottom: 12px; line-height: 1.7; }
+.faq details { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin: 8px 0; }
+.faq summary { font-weight: 700; cursor: pointer; font-size: 0.92rem; }
+.faq p { margin-top: 8px; font-size: 0.85rem; color: var(--text2); }
+.nav-links { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+.nav-links a { background: var(--bg2); color: var(--accent); padding: 6px 14px; border-radius: 20px; font-size: 0.82rem; font-weight: 600; text-decoration: none; border: 1px solid var(--border); }
+footer { text-align: center; padding: 24px 0; font-size: 0.75rem; color: var(--text2); }
+footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+  <h1>⚒️ Workers Comp Calculator</h1>
+  <button id="themeToggle" onclick="document.documentElement.dataset.theme=document.documentElement.dataset.theme==='dark'?'light':'dark'">🌓</button>
+</header>
+
+<div class="ad-slot">
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8079614247767823" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<div class="card">
+  <h2>Your Information</h2>
+  <div class="field">
+    <label>Average Weekly Wage ($)</label>
+    <input type="number" id="weeklyWage" value="1200" oninput="calc()">
+    <div class="field-hint">Your average gross weekly earnings before injury</div>
+  </div>
+  <div class="field">
+    <label>Disability Type</label>
+    <select id="disType" onchange="calc()">
+      <option value="temp_total">Temporary Total Disability (TTD)</option>
+      <option value="temp_partial">Temporary Partial Disability (TPD)</option>
+      <option value="perm_partial" selected>Permanent Partial Disability (PPD)</option>
+      <option value="perm_total">Permanent Total Disability (PTD)</option>
+    </select>
+  </div>
+  <div class="row2">
+    <div class="field">
+      <label>Disability Rating (%)</label>
+      <input type="number" id="rating" value="15" min="0" max="100" oninput="calc()">
+      <div class="field-hint">From your doctor's MMI report</div>
+    </div>
+    <div class="field">
+      <label>Weeks of Benefits</label>
+      <input type="number" id="weeks" value="52" oninput="calc()">
+    </div>
+  </div>
+  <div class="field">
+    <label>Medical Bills ($)</label>
+    <input type="number" id="medBills" value="25000" oninput="calc()">
+  </div>
+  <button class="btn" onclick="calc()">Calculate Benefits</button>
+</div>
+
+<div class="card" id="resultCard" style="display:none;">
+  <h2>Estimated Workers Comp Benefits</h2>
+  <div id="results"></div>
+  <div class="info-box">
+    ⚠️ Workers comp rules vary by state. This uses general guidelines — consult your state's workers comp board or an attorney for exact amounts.
+  </div>
+</div>
+
+<div class="ad-slot">
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-8079614247767823" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<div class="card content">
+  <h3>How Workers Compensation Works</h3>
+  <p>Workers comp is a <strong>no-fault system</strong> — you don't need to prove your employer was negligent. In exchange, you generally can't sue your employer for the injury.</p>
+  <p><strong>Benefit calculation:</strong> Most states pay 2/3 of your average weekly wage (AWW) for temporary total disability, subject to state minimums and maximums. Permanent partial disability uses your disability rating to determine the settlement.</p>
+  <p><strong>Lump sum vs. structured:</strong> You can often negotiate a lump-sum settlement instead of weekly payments. Lump sums are typically discounted 10-20% but give you immediate access to funds.</p>
+</div>
+
+<div class="card faq">
+  <h3>Frequently Asked Questions</h3>
+  <details open>
+    <summary>Do I need a lawyer for workers comp?</summary>
+    <p>For simple claims with accepted injuries, you may not need one. But if your claim is denied, your employer disputes the injury, or you have a permanent disability, an attorney can significantly increase your settlement (typically 15-20% contingency fee).</p>
+  </details>
+  <details>
+    <summary>Can I be fired for filing workers comp?</summary>
+    <p>It's illegal to retaliate against an employee for filing a workers comp claim. However, your employer can terminate you for legitimate business reasons. Document everything and consult an attorney if you suspect retaliation.</p>
+  </details>
+  <details>
+    <summary>What if my claim is denied?</summary>
+    <p>You can appeal within 30-90 days (varies by state). Common denial reasons include late reporting, pre-existing conditions, or disputed work-relatedness. An attorney can help navigate the appeals process.</p>
+  </details>
+</div>
+
+<div class="card">
+  <h2>Related Tools</h2>
+  <div class="nav-links">
+    <a href="/en/car-accident-calculator/">Car Accident Calculator</a>
+    <a href="/en/mortgage-calculator/">Mortgage Calculator</a>
+    <a href="/en/compound-interest/">Compound Interest</a>
+    <a href="/en/bmi-calculator/">BMI Calculator</a>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 SJA Studio | <a href="/en/">All Tools</a></p>
+</footer>
+</div>
+
+<script>
+function fmt(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+function calc() {
+  const aww = parseFloat(document.getElementById('weeklyWage').value) || 0;
+  const disType = document.getElementById('disType').value;
+  const rating = (parseFloat(document.getElementById('rating').value) || 0) / 100;
+  const weeks = parseFloat(document.getElementById('weeks').value) || 0;
+  const med = parseFloat(document.getElementById('medBills').value) || 0;
+
+  let weeklyBenefit, totalWage, desc;
+  switch(disType) {
+    case 'temp_total':
+      weeklyBenefit = Math.round(aww * 2/3);
+      totalWage = weeklyBenefit * weeks;
+      desc = 'TTD: 2/3 of AWW';
+      break;
+    case 'temp_partial':
+      weeklyBenefit = Math.round(aww * 2/3 * 0.5);
+      totalWage = weeklyBenefit * weeks;
+      desc = 'TPD: 2/3 of AWW × 50%';
+      break;
+    case 'perm_partial':
+      weeklyBenefit = Math.round(aww * 2/3);
+      totalWage = Math.round(weeklyBenefit * weeks * rating);
+      desc = `PPD: 2/3 AWW × ${Math.round(rating*100)}% rating × ${weeks} wks`;
+      break;
+    case 'perm_total':
+      weeklyBenefit = Math.round(aww * 2/3);
+      totalWage = weeklyBenefit * weeks;
+      desc = 'PTD: 2/3 of AWW (ongoing)';
+      break;
+  }
+  const totalSettlement = totalWage + med;
+  const lumpSum = Math.round(totalSettlement * 0.85);
+
+  document.getElementById('resultCard').style.display = 'block';
+  document.getElementById('results').innerHTML = `
+    <div class="result-row"><span class="result-label">Weekly Benefit Rate</span><span class="result-value green">${fmt(weeklyBenefit)}/wk</span></div>
+    <div class="result-row"><span class="result-label">Calculation</span><span class="result-value" style="font-size:0.85rem">${desc}</span></div>
+    <div class="result-row"><span class="result-label">Total Wage Benefits</span><span class="result-value">${fmt(totalWage)}</span></div>
+    <div class="result-row"><span class="result-label">Medical Bills Covered</span><span class="result-value">${fmt(med)}</span></div>
+    <div class="result-row" style="border-top:2px solid var(--accent);padding-top:12px;">
+      <span class="result-label"><strong>Total Settlement Value</strong></span>
+      <span class="result-value highlight">${fmt(totalSettlement)}</span>
+    </div>
+    <div class="result-row"><span class="result-label">Est. Lump Sum (15% discount)</span><span class="result-value">${fmt(lumpSum)}</span></div>
+  `;
+}
+calc();
+</script>
+</body>
+</html>
