@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>연봉 실수령액 계산기 2026 - 4대보험 소득세 공제 후 월급</title>
+<meta name="description" content="2026년 연봉 실수령액 계산기 - 4대보험, 소득세, 지방소득세 공제 후 실제 월급을 계산합니다. 비과세액 설정 가능.">
+<link rel="canonical" href="https://smartcalc.tools/ko/salary-calculator">
+<link rel="stylesheet" href="../assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"연봉 실수령액 계산기","applicationCategory":"FinanceApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"}}
+</script>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>💰 연봉 실수령액 계산기</h1>
+    <p>4대보험 · 소득세 공제 후 실수령액 즉시 계산</p>
+  </header>
+  <div class="ad-slot">광고 영역</div>
+  <div class="calc-card">
+    <div class="form-group">
+      <label for="salary">연봉 (원)</label>
+      <input type="text" id="salary" placeholder="예: 50,000,000" inputmode="numeric">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="non-tax">비과세액 (월, 원)</label>
+        <input type="text" id="non-tax" value="200,000" inputmode="numeric">
+      </div>
+      <div class="form-group">
+        <label for="dependents">부양가족 수 (본인 포함)</label>
+        <select id="dependents">
+          <option value="1" selected>1명</option>
+          <option value="2">2명</option>
+          <option value="3">3명</option>
+          <option value="4">4명</option>
+          <option value="5">5명</option>
+          <option value="6">6명+</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn" onclick="calculate()">계산하기</button>
+    <div class="result-box" id="result">
+      <div class="result-highlight" id="net-monthly"></div>
+      <div style="text-align:center;color:var(--text-muted);margin-bottom:12px;font-size:0.9rem" id="net-yearly"></div>
+      <div class="result-row"><span class="label">월 급여 (세전)</span><span class="value" id="gross-monthly"></span></div>
+      <div class="result-row"><span class="label">국민연금 (4.5%)</span><span class="value" id="nps"></span></div>
+      <div class="result-row"><span class="label">건강보험 (3.545%)</span><span class="value" id="nhi"></span></div>
+      <div class="result-row"><span class="label">장기요양 (건보의 12.81%)</span><span class="value" id="ltc"></span></div>
+      <div class="result-row"><span class="label">고용보험 (0.9%)</span><span class="value" id="ei"></span></div>
+      <div class="result-row"><span class="label">소득세</span><span class="value" id="income-tax"></span></div>
+      <div class="result-row"><span class="label">지방소득세 (소득세의 10%)</span><span class="value" id="local-tax"></span></div>
+      <div class="result-row" style="border-top:2px solid var(--border);padding-top:12px;font-weight:700"><span class="label">총 공제액</span><span class="value" id="total-deduction"></span></div>
+    </div>
+  </div>
+  <div class="ad-slot">광고 영역</div>
+  <div class="seo-content">
+    <h2>2026년 연봉 실수령액 계산 방법</h2>
+    <p>연봉에서 4대보험(국민연금, 건강보험, 장기요양보험, 고용보험)과 소득세, 지방소득세를 공제한 금액이 실수령액입니다.</p>
+    <h3>2026년 4대보험 요율</h3>
+    <ul>
+      <li><strong>국민연금</strong>: 월 급여의 4.5% (상한 월 590만원)</li>
+      <li><strong>건강보험</strong>: 월 급여의 3.545%</li>
+      <li><strong>장기요양보험</strong>: 건강보험료의 12.81%</li>
+      <li><strong>고용보험</strong>: 월 급여의 0.9%</li>
+    </ul>
+    <h3>연봉별 실수령액 참고표</h3>
+    <ul>
+      <li>연봉 3,000만원 → 월 약 225만원</li>
+      <li>연봉 4,000만원 → 월 약 293만원</li>
+      <li>연봉 5,000만원 → 월 약 356만원</li>
+      <li>연봉 6,000만원 → 월 약 415만원</li>
+      <li>연봉 7,000만원 → 월 약 472만원</li>
+      <li>연봉 1억원 → 월 약 637만원</li>
+    </ul>
+  </div>
+  <div class="ad-slot">광고 영역</div>
+  <footer>
+    <p>SmartCalc.tools — 무료 금융 계산기</p>
+    <p>이 계산기는 참고용이며, 정확한 금액은 회사 급여담당자에게 확인하세요.</p>
+  </footer>
+</div>
+<script>
+function fmt(n){return Math.round(n).toLocaleString('ko-KR')}
+function parseMoney(s){return parseInt(String(s).replace(/[^0-9]/g,''),10)||0}
+['salary','non-tax'].forEach(function(id){
+  document.getElementById(id).addEventListener('input',function(){
+    var raw=this.value.replace(/[^0-9]/g,'');
+    if(raw)this.value=parseInt(raw).toLocaleString('ko-KR');
+  });
+});
+
+var TAX_BRACKETS=[
+  [14000000,0.06,0],
+  [50000000,0.15,1260000],
+  [88000000,0.24,5760000],
+  [150000000,0.35,15440000],
+  [300000000,0.38,19940000],
+  [500000000,0.40,25940000],
+  [1000000000,0.42,35940000],
+  [Infinity,0.45,65940000]
+];
+
+function calcIncomeTax(annualTaxable,dependents){
+  var deduction=1500000*dependents;
+  var taxBase=Math.max(annualTaxable-deduction,0);
+  var tax=0;
+  for(var i=0;i<TAX_BRACKETS.length;i++){
+    if(taxBase<=TAX_BRACKETS[i][0]){
+      tax=taxBase*TAX_BRACKETS[i][1]-TAX_BRACKETS[i][2];
+      break;
+    }
+  }
+  return Math.max(tax,0)/12;
+}
+
+function calculate(){
+  var annual=parseMoney(document.getElementById('salary').value);
+  var nonTax=parseMoney(document.getElementById('non-tax').value);
+  var deps=parseInt(document.getElementById('dependents').value);
+  if(!annual)return;
+
+  var monthly=annual/12;
+  var taxable=monthly-nonTax;
+  if(taxable<0)taxable=0;
+
+  var nps=Math.min(taxable*0.045,5900000*0.045);
+  var nhi=taxable*0.03545;
+  var ltc=nhi*0.1281;
+  var ei=taxable*0.009;
+  var incomeTax=calcIncomeTax(taxable*12,deps);
+  var localTax=incomeTax*0.1;
+
+  var totalDeduction=nps+nhi+ltc+ei+incomeTax+localTax;
+  var net=monthly-totalDeduction;
+
+  document.getElementById('net-monthly').textContent='월 실수령 '+fmt(net)+'원';
+  document.getElementById('net-yearly').textContent='연 실수령 '+fmt(net*12)+'원';
+  document.getElementById('gross-monthly').textContent=fmt(monthly)+'원';
+  document.getElementById('nps').textContent='-'+fmt(nps)+'원';
+  document.getElementById('nhi').textContent='-'+fmt(nhi)+'원';
+  document.getElementById('ltc').textContent='-'+fmt(ltc)+'원';
+  document.getElementById('ei').textContent='-'+fmt(ei)+'원';
+  document.getElementById('income-tax').textContent='-'+fmt(incomeTax)+'원';
+  document.getElementById('local-tax').textContent='-'+fmt(localTax)+'원';
+  document.getElementById('total-deduction').textContent='-'+fmt(totalDeduction)+'원';
+  document.getElementById('result').classList.add('show');
+}
+</script>
+</body>
+</html>

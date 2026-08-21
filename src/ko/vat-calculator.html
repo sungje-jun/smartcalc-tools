@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>부가세 계산기 2026 - 공급가액 부가가치세 자동 계산</title>
+<meta name="description" content="부가세 계산기 - 공급가액에서 부가가치세 10% 자동 계산, 합계금액에서 부가세 역산. 세금계산서 작성 시 필수.">
+<link rel="stylesheet" href="../assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"부가세 계산기","applicationCategory":"FinanceApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"}}
+</script>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>🧾 부가세 계산기</h1>
+    <p>공급가액 ↔ 부가가치세 즉시 계산</p>
+  </header>
+  <div class="ad-slot">광고 영역</div>
+  <div class="calc-card">
+    <div class="form-group">
+      <label for="mode">계산 방식</label>
+      <select id="mode" onchange="toggleMode()">
+        <option value="add">공급가액 → 부가세 포함 금액</option>
+        <option value="split">합계금액 → 부가세 분리</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="amount" id="amount-label">공급가액 (원)</label>
+      <input type="text" id="amount" placeholder="예: 1,000,000" inputmode="numeric">
+    </div>
+    <div class="form-group">
+      <label for="vat-rate">부가세율 (%)</label>
+      <input type="number" id="vat-rate" value="10" step="1" min="0" max="100">
+    </div>
+    <button class="btn" onclick="calculate()">계산하기</button>
+    <div class="result-box" id="result">
+      <div class="result-highlight" id="highlight"></div>
+      <div class="result-row"><span class="label">공급가액</span><span class="value" id="supply"></span></div>
+      <div class="result-row"><span class="label">부가가치세</span><span class="value" id="vat"></span></div>
+      <div class="result-row"><span class="label">합계금액</span><span class="value" id="total"></span></div>
+    </div>
+  </div>
+  <div class="ad-slot">광고 영역</div>
+  <div class="seo-content">
+    <h2>부가가치세 계산 방법</h2>
+    <p>부가가치세(VAT)는 상품이나 서비스의 공급가액에 10%를 적용하여 계산합니다.</p>
+    <h3>계산 공식</h3>
+    <ul>
+      <li><strong>부가세 포함</strong>: 합계금액 = 공급가액 × 1.1</li>
+      <li><strong>부가세 분리</strong>: 공급가액 = 합계금액 ÷ 1.1, 부가세 = 합계금액 - 공급가액</li>
+    </ul>
+    <h3>부가세 신고 일정 (2026년)</h3>
+    <ul>
+      <li>1기 예정: 1월~3월 → 4월 25일까지 신고</li>
+      <li>1기 확정: 1월~6월 → 7월 25일까지 신고</li>
+      <li>2기 예정: 7월~9월 → 10월 25일까지 신고</li>
+      <li>2기 확정: 7월~12월 → 다음해 1월 25일까지 신고</li>
+    </ul>
+    <h3>간이과세자 기준</h3>
+    <p>2026년 기준 연 매출 1억 400만원 미만인 개인사업자는 간이과세자로 분류되어 업종별 부가가치율(15%~40%)을 적용받습니다.</p>
+  </div>
+  <div class="ad-slot">광고 영역</div>
+  <footer>
+    <p>SmartCalc.tools — 무료 세금 계산기</p>
+    <p>정확한 세금 계산은 세무사에게 확인하세요.</p>
+  </footer>
+</div>
+<script>
+function fmt(n){return Math.round(n).toLocaleString('ko-KR')}
+function parseMoney(s){return parseInt(String(s).replace(/[^0-9]/g,''),10)||0}
+document.getElementById('amount').addEventListener('input',function(){
+  var raw=this.value.replace(/[^0-9]/g,'');
+  if(raw)this.value=parseInt(raw).toLocaleString('ko-KR');
+});
+function toggleMode(){
+  var mode=document.getElementById('mode').value;
+  document.getElementById('amount-label').textContent=mode==='add'?'공급가액 (원)':'합계금액 (원)';
+  document.getElementById('amount').placeholder=mode==='add'?'예: 1,000,000':'예: 1,100,000';
+}
+function calculate(){
+  var mode=document.getElementById('mode').value;
+  var amount=parseMoney(document.getElementById('amount').value);
+  var rate=parseFloat(document.getElementById('vat-rate').value)/100;
+  if(!amount)return;
+  var supply,vat,total;
+  if(mode==='add'){
+    supply=amount;
+    vat=Math.round(supply*rate);
+    total=supply+vat;
+    document.getElementById('highlight').textContent='합계 '+fmt(total)+'원';
+  }else{
+    total=amount;
+    supply=Math.round(total/(1+rate));
+    vat=total-supply;
+    document.getElementById('highlight').textContent='공급가액 '+fmt(supply)+'원';
+  }
+  document.getElementById('supply').textContent=fmt(supply)+'원';
+  document.getElementById('vat').textContent=fmt(vat)+'원';
+  document.getElementById('total').textContent=fmt(total)+'원';
+  document.getElementById('result').classList.add('show');
+}
+</script>
+</body>
+</html>

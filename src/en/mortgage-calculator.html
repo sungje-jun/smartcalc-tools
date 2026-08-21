@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mortgage Calculator 2026 - Free Monthly Payment Calculator</title>
+<meta name="description" content="Free mortgage calculator - Calculate your monthly mortgage payment, total interest, and amortization schedule. Compare 15-year vs 30-year mortgages instantly.">
+<meta name="keywords" content="mortgage calculator, home loan calculator, monthly payment calculator, mortgage interest calculator, amortization schedule">
+<link rel="canonical" href="https://smartcalc.tools/en/mortgage-calculator">
+<link rel="stylesheet" href="../assets/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Mortgage Calculator",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+}
+</script>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>🏠 Mortgage Calculator</h1>
+    <p>Calculate your monthly mortgage payment instantly</p>
+  </header>
+
+  <div class="ad-slot" id="ad-top">Ad Space</div>
+
+  <div class="calc-card">
+    <div class="form-group">
+      <label for="home-price">Home Price ($)</label>
+      <input type="text" id="home-price" placeholder="e.g. 350,000" inputmode="numeric">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="down-payment">Down Payment ($)</label>
+        <input type="text" id="down-payment" placeholder="e.g. 70,000" inputmode="numeric">
+      </div>
+      <div class="form-group">
+        <label for="down-pct">Down Payment (%)</label>
+        <input type="number" id="down-pct" value="20" min="0" max="100" step="1">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="rate">Interest Rate (%)</label>
+        <input type="number" id="rate" placeholder="e.g. 6.5" step="0.01" min="0" max="30">
+      </div>
+      <div class="form-group">
+        <label for="term">Loan Term</label>
+        <select id="term">
+          <option value="360" selected>30 years</option>
+          <option value="240">20 years</option>
+          <option value="180">15 years</option>
+          <option value="120">10 years</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="tax">Property Tax ($/yr)</label>
+        <input type="text" id="tax" placeholder="e.g. 4,200" inputmode="numeric">
+      </div>
+      <div class="form-group">
+        <label for="insurance">Home Insurance ($/yr)</label>
+        <input type="text" id="insurance" placeholder="e.g. 1,200" inputmode="numeric">
+      </div>
+    </div>
+    <button class="btn" onclick="calculate()">Calculate</button>
+
+    <div class="result-box" id="result">
+      <div class="result-highlight" id="monthly-total"></div>
+      <div class="result-row"><span class="label">Principal & Interest</span><span class="value" id="pi"></span></div>
+      <div class="result-row"><span class="label">Property Tax</span><span class="value" id="tax-monthly"></span></div>
+      <div class="result-row"><span class="label">Insurance</span><span class="value" id="ins-monthly"></span></div>
+      <div class="result-row"><span class="label">Loan Amount</span><span class="value" id="loan-amt"></span></div>
+      <div class="result-row"><span class="label">Total Interest</span><span class="value" id="total-interest"></span></div>
+      <div class="result-row"><span class="label">Total Cost</span><span class="value" id="total-cost"></span></div>
+    </div>
+  </div>
+
+  <div class="ad-slot" id="ad-mid">Ad Space</div>
+
+  <div class="calc-card" id="schedule-section" style="display:none">
+    <h2 style="font-size:1.1rem;margin-bottom:12px">📋 Amortization Schedule</h2>
+    <div style="overflow-x:auto">
+      <table id="schedule-table" style="width:100%;border-collapse:collapse;font-size:0.85rem;font-variant-numeric:tabular-nums">
+        <thead>
+          <tr style="border-bottom:2px solid var(--border)">
+            <th style="padding:8px 4px;text-align:center">Month</th>
+            <th style="padding:8px 4px;text-align:right">Payment</th>
+            <th style="padding:8px 4px;text-align:right">Principal</th>
+            <th style="padding:8px 4px;text-align:right">Interest</th>
+            <th style="padding:8px 4px;text-align:right">Balance</th>
+          </tr>
+        </thead>
+        <tbody id="schedule-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="seo-content">
+    <h2>How to Use This Mortgage Calculator</h2>
+    <p>Enter your home price, down payment, interest rate, and loan term to calculate your estimated monthly mortgage payment. The calculator includes property tax and home insurance for a complete picture of your monthly housing costs.</p>
+
+    <h3>Understanding Your Mortgage Payment</h3>
+    <ul>
+      <li><strong>Principal & Interest (P&I)</strong>: The core mortgage payment that goes toward paying off your loan balance and interest charges.</li>
+      <li><strong>Property Tax</strong>: Annual property tax divided by 12 months, typically 0.5% to 2.5% of home value depending on location.</li>
+      <li><strong>Home Insurance</strong>: Annual homeowner's insurance premium divided by 12 months.</li>
+    </ul>
+
+    <h3>30-Year vs 15-Year Mortgage</h3>
+    <p>A 30-year mortgage has lower monthly payments but higher total interest. A 15-year mortgage has higher monthly payments but saves tens of thousands in interest over the life of the loan. Use this calculator to compare both options.</p>
+
+    <h3>2026 Mortgage Rates</h3>
+    <p>As of August 2026, average 30-year fixed mortgage rates range from 5.5% to 7.0%, while 15-year fixed rates range from 5.0% to 6.5%. Rates vary by lender, credit score, and loan amount.</p>
+  </div>
+
+  <div class="ad-slot" id="ad-bottom">Ad Space</div>
+
+  <footer>
+    <p>SmartCalc.tools — Free Financial Calculators</p>
+    <p>This calculator provides estimates only. Contact your lender for exact figures.</p>
+  </footer>
+</div>
+
+<script>
+function fmt(n) { return '$' + Math.round(n).toLocaleString('en-US'); }
+function parseMoney(s) { return parseInt(String(s).replace(/[^0-9]/g, ''), 10) || 0; }
+
+['home-price','down-payment','tax','insurance'].forEach(function(id) {
+  var el = document.getElementById(id);
+  el.addEventListener('input', function() {
+    var raw = this.value.replace(/[^0-9]/g, '');
+    if (raw) this.value = parseInt(raw).toLocaleString('en-US');
+  });
+});
+
+document.getElementById('home-price').addEventListener('input', syncDown);
+document.getElementById('down-pct').addEventListener('input', function() {
+  var hp = parseMoney(document.getElementById('home-price').value);
+  var pct = parseFloat(this.value) || 0;
+  var dp = Math.round(hp * pct / 100);
+  document.getElementById('down-payment').value = dp ? dp.toLocaleString('en-US') : '';
+});
+function syncDown() {
+  var hp = parseMoney(document.getElementById('home-price').value);
+  var pct = parseFloat(document.getElementById('down-pct').value) || 0;
+  var dp = Math.round(hp * pct / 100);
+  document.getElementById('down-payment').value = dp ? dp.toLocaleString('en-US') : '';
+}
+
+function calculate() {
+  var hp = parseMoney(document.getElementById('home-price').value);
+  var dp = parseMoney(document.getElementById('down-payment').value);
+  var P = hp - dp;
+  var r = parseFloat(document.getElementById('rate').value) / 100 / 12;
+  var n = parseInt(document.getElementById('term').value);
+  var tax = parseMoney(document.getElementById('tax').value) / 12;
+  var ins = parseMoney(document.getElementById('insurance').value) / 12;
+
+  if (!P || r <= 0) return;
+
+  var pi = P * r * Math.pow(1+r,n) / (Math.pow(1+r,n)-1);
+  var totalPayment = pi * n;
+  var totalInterest = totalPayment - P;
+
+  document.getElementById('monthly-total').textContent = fmt(pi + tax + ins) + '/mo';
+  document.getElementById('pi').textContent = fmt(pi);
+  document.getElementById('tax-monthly').textContent = fmt(tax);
+  document.getElementById('ins-monthly').textContent = fmt(ins);
+  document.getElementById('loan-amt').textContent = fmt(P);
+  document.getElementById('total-interest').textContent = fmt(totalInterest);
+  document.getElementById('total-cost').textContent = fmt(totalPayment + tax*n + ins*n);
+  document.getElementById('result').classList.add('show');
+
+  var tbody = document.getElementById('schedule-body');
+  tbody.innerHTML = '';
+  var balance = P;
+  var schedule = [];
+  for (var i = 1; i <= n; i++) {
+    var interest = balance * r;
+    var principal = pi - interest;
+    balance -= principal;
+    if (balance < 0) balance = 0;
+    schedule.push([i, pi, principal, interest, balance]);
+  }
+  var rows = n <= 60 ? schedule : schedule.slice(0,12).concat([null]).concat(schedule.slice(-6));
+  rows.forEach(function(row) {
+    var tr = document.createElement('tr');
+    tr.style.borderBottom = '1px solid var(--border)';
+    if (!row) {
+      tr.innerHTML = '<td colspan="5" style="padding:8px;text-align:center;color:var(--text-muted)">...</td>';
+    } else {
+      tr.innerHTML =
+        '<td style="padding:6px 4px;text-align:center">'+row[0]+'</td>'+
+        '<td style="padding:6px 4px;text-align:right">'+fmt(row[1])+'</td>'+
+        '<td style="padding:6px 4px;text-align:right">'+fmt(row[2])+'</td>'+
+        '<td style="padding:6px 4px;text-align:right">'+fmt(row[3])+'</td>'+
+        '<td style="padding:6px 4px;text-align:right">'+fmt(row[4])+'</td>';
+    }
+    tbody.appendChild(tr);
+  });
+  document.getElementById('schedule-section').style.display = 'block';
+}
+</script>
+</body>
+</html>
