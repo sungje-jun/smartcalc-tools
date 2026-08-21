@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BMI Calculator 2026 - Free Body Mass Index Calculator</title>
+<meta name="description" content="Free BMI calculator - Calculate your Body Mass Index instantly. Understand your weight category with WHO standards. Metric and Imperial units supported.">
+<link rel="stylesheet" href="../assets/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"BMI Calculator","applicationCategory":"HealthApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>⚖️ BMI Calculator</h1>
+    <p>Calculate your Body Mass Index instantly</p>
+  </header>
+  <div class="ad-slot">Ad Space</div>
+  <div class="calc-card">
+    <div class="form-group">
+      <label for="unit">Unit System</label>
+      <select id="unit" onchange="toggleUnit()">
+        <option value="metric">Metric (cm, kg)</option>
+        <option value="imperial">Imperial (ft/in, lbs)</option>
+      </select>
+    </div>
+    <div id="metric-inputs">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="height-cm">Height (cm)</label>
+          <input type="number" id="height-cm" placeholder="170" min="50" max="300">
+        </div>
+        <div class="form-group">
+          <label for="weight-kg">Weight (kg)</label>
+          <input type="number" id="weight-kg" placeholder="70" min="10" max="500" step="0.1">
+        </div>
+      </div>
+    </div>
+    <div id="imperial-inputs" style="display:none">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="height-ft">Height (ft)</label>
+          <input type="number" id="height-ft" placeholder="5" min="1" max="9">
+        </div>
+        <div class="form-group">
+          <label for="height-in">Height (in)</label>
+          <input type="number" id="height-in" placeholder="7" min="0" max="11">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="weight-lbs">Weight (lbs)</label>
+        <input type="number" id="weight-lbs" placeholder="154" min="20" max="1000" step="0.1">
+      </div>
+    </div>
+    <button class="btn" onclick="calculate()">Calculate BMI</button>
+    <div class="result-box" id="result">
+      <div class="result-highlight" id="bmi-value"></div>
+      <div class="result-row"><span class="label">Category</span><span class="value" id="category"></span></div>
+      <div class="result-row"><span class="label">Healthy Weight Range</span><span class="value" id="healthy-range"></span></div>
+      <div id="bmi-bar" style="margin-top:16px;height:24px;border-radius:12px;background:linear-gradient(to right,#3b82f6 0%,#22c55e 25%,#eab308 55%,#f97316 75%,#ef4444 100%);position:relative;overflow:visible">
+        <div id="bmi-marker" style="position:absolute;top:-6px;width:4px;height:36px;background:#1e293b;border-radius:2px;transition:left 0.3s;display:none"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text-muted);margin-top:4px">
+        <span>Underweight</span><span>Normal</span><span>Overweight</span><span>Obese</span>
+      </div>
+    </div>
+  </div>
+  <div class="ad-slot">Ad Space</div>
+  <div class="seo-content">
+    <h2>What is BMI?</h2>
+    <p>Body Mass Index (BMI) is a screening tool that estimates body fat based on height and weight. While it doesn't measure body fat directly, it correlates with more direct measures of body fat.</p>
+    <h3>BMI Categories (WHO)</h3>
+    <ul>
+      <li><strong>Underweight</strong>: Below 18.5</li>
+      <li><strong>Normal weight</strong>: 18.5 – 24.9</li>
+      <li><strong>Overweight</strong>: 25.0 – 29.9</li>
+      <li><strong>Obesity Class I</strong>: 30.0 – 34.9</li>
+      <li><strong>Obesity Class II</strong>: 35.0 – 39.9</li>
+      <li><strong>Obesity Class III</strong>: 40.0 and above</li>
+    </ul>
+    <h3>Limitations</h3>
+    <p>BMI doesn't distinguish between muscle and fat mass. Athletes and muscular individuals may have a high BMI without excess body fat. Always consult a healthcare provider for a complete health assessment.</p>
+  </div>
+  <div class="ad-slot">Ad Space</div>
+  <footer>
+    <p>SmartCalc.tools — Free Health Calculators</p>
+    <p>BMI is a screening tool, not a diagnostic measure. Consult your doctor for health advice.</p>
+  </footer>
+</div>
+<script>
+function toggleUnit(){
+  var imp=document.getElementById('unit').value==='imperial';
+  document.getElementById('metric-inputs').style.display=imp?'none':'block';
+  document.getElementById('imperial-inputs').style.display=imp?'block':'none';
+}
+function calculate(){
+  var imp=document.getElementById('unit').value==='imperial';
+  var h,w;
+  if(imp){
+    var ft=parseFloat(document.getElementById('height-ft').value)||0;
+    var inc=parseFloat(document.getElementById('height-in').value)||0;
+    h=(ft*12+inc)*2.54/100;
+    w=(parseFloat(document.getElementById('weight-lbs').value)||0)*0.453592;
+  }else{
+    h=(parseFloat(document.getElementById('height-cm').value)||0)/100;
+    w=parseFloat(document.getElementById('weight-kg').value)||0;
+  }
+  if(!h||!w)return;
+  var bmi=w/(h*h);
+  var cat,color;
+  if(bmi<18.5){cat='Underweight';color='#3b82f6';}
+  else if(bmi<25){cat='Normal weight';color='#22c55e';}
+  else if(bmi<30){cat='Overweight';color='#eab308';}
+  else if(bmi<35){cat='Obesity Class I';color='#f97316';}
+  else if(bmi<40){cat='Obesity Class II';color='#ef4444';}
+  else{cat='Obesity Class III';color='#dc2626';}
+
+  var lo=(18.5*h*h).toFixed(1);
+  var hi=(24.9*h*h).toFixed(1);
+  var unit=imp?'lbs':'kg';
+  if(imp){lo=(lo/0.453592).toFixed(1);hi=(hi/0.453592).toFixed(1);}
+
+  document.getElementById('bmi-value').textContent='BMI: '+bmi.toFixed(1);
+  document.getElementById('bmi-value').style.color=color;
+  document.getElementById('category').textContent=cat;
+  document.getElementById('category').style.color=color;
+  document.getElementById('healthy-range').textContent=lo+' – '+hi+' '+unit;
+
+  var pct=Math.min(Math.max((bmi-15)/(45-15)*100,0),100);
+  var marker=document.getElementById('bmi-marker');
+  marker.style.display='block';
+  marker.style.left='calc('+pct+'% - 2px)';
+
+  document.getElementById('result').classList.add('show');
+}
+</script>
+</body>
+</html>
